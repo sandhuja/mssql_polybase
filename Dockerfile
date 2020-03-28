@@ -15,8 +15,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update && \
     # Install PolyBase will also install SQL Server via dependency mechanism.
     apt-get install --quiet --yes && \
-    mssql-server && \
-	mssql-server-polybase  && \
+    mssql-server-polybase  && \
     # Cleanup the Dockerfile
     apt-get clean && \
     rm -rf /var/lib/apt/lists
