@@ -14,10 +14,15 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     curl https://packages.microsoft.com/config/ubuntu/16.04/mssql-server-preview.list | tee /etc/apt/sources.list.d/mssql-server-preview.list && \
     apt-get update && \
     # Install PolyBase will also install SQL Server via dependency mechanism.
-    apt-get install -y mssql-server-polybase && \
+    apt-get install --quiet --yes && \
+    mssql-server && \
+	mssql-server-polybase  && \
     # Cleanup the Dockerfile
     apt-get clean && \
     rm -rf /var/lib/apt/lists
+
+# exit zero on failure in case sqlservr doesn't start here
+RUN MSSQL_PID=Developer ACCEPT_EULA=Y MSSQL_SA_PASSWORD=$SA_PASSWORD /opt/mssql/bin/mssql-conf -n setup || exit 0
 
 # Run SQL Server process
 CMD /opt/mssql/bin/sqlservr
